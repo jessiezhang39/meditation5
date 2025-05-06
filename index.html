@@ -1,6 +1,8 @@
- <script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
-  <script>
-    /* global nn */
+<script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
+
+<script>
+
+/* global nn */
 let music, stopTimer
 
 const samples = {
@@ -21,13 +23,15 @@ function createCircle(x, y) {
   const circle = nn.create('div')
     .addClass('circle')
     .css({
+      position: 'absolute',
+      transform: 'scale(0.5)',
+      opacity: 1,
+      zIndex: 999,
       width: size + 'px',
       height: size + 'px',
       left: x - size/2 + 'px',
       top: y - size/2 + 'px',
       backgroundColor: getRandomColor(),
-      transform: 'scale(0.5)',
-      opacity: 1
     })
     .addTo('body')
 
@@ -55,7 +59,7 @@ function splashCircles() {
 }
 
 function playSample (e) {  
-  const s = samples[e.key]  
+ const s = samples[e.key]  
   music.currentTime = s.offset
   music.play()
   
@@ -63,21 +67,15 @@ function playSample (e) {
   const stopPlaying = () => music.pause()
   if (stopTimer) clearTimeout(stopTimer)
   stopTimer = setTimeout(stopPlaying, stopTime)
+  
+  splashCircles()
 }
 
 function fileLoaded() {
   nn.create('span')
-    .css('font-family', 'monospace')
+    .css('font-family', 'garamond')
     .content('Press the keys: a, b, c, d, e, f')
     .addTo('body')
-
-  nn.on('keypress', (e) => {
-    const key = e.key()
-    if (samples[key]) {
-      playSample(key)
-      splashCircles()
-    }
-  })
 }
     
 function setup() {
@@ -92,15 +90,12 @@ function setup() {
     .set('src', 'electric-piano-chords.mp3')
     .addTo('body')
     .on('loadeddata', fileLoaded)
+  
 }
     
 nn.on('load', setup)
+nn.on('keypress', playSample)
 
 
-    /*document.addEventListener('keydown', (e) => {
-      const validKeys = ['a', 'b', 'c', 'd', 'e']
-      if (validKeys.includes(e.key.toLowerCase())) {
-        splashCircles() */
-      }
-    })
-  </script>
+
+</script>
