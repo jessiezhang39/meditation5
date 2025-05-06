@@ -6,12 +6,12 @@
 let music, stopTimer
 
 const samples = {
-  'a': { offset: 0, duration: 1.87 },
-  'b': { offset: 1.89, duration: 1.72 },
-  'c': { offset: 3.74, duration: 1.92 },
-  'd': { offset: 7.06, duration: 1.71 },
-  'e': { offset: 8.79, duration: 1.69 },
-  'f': { offset: 10.52, duration: 1.70 },
+  '1': { offset: 0, duration: 1.87 },
+  '2': { offset: 1.89, duration: 1.72 },
+  '3': { offset: 3.74, duration: 1.92 },
+  '4': { offset: 7.06, duration: 1.71 },
+  '5': { offset: 8.79, duration: 1.69 },
+  '6': { offset: 10.52, duration: 1.70 },
 }
     
 function getRandomColor() {
@@ -26,13 +26,13 @@ function createCircle(x, y) {
       position:'absolute',
       width: size + 'px',
       height: size + 'px',
-      left: x - size/2 + 'px',
-      top: y - size/2 + 'px',
+      left: x - size + 'px',
+      top: y - size + 'px',
       backgroundColor: getRandomColor(),
       borderRadius: '50%',
       transform: 'scale(0.5)',
       opacity: 2,
-      transition:     'transform 1.15s ease, opacity 1.15s ease',
+      transition: 'transform 1.15s ease, opacity 1.15s ease',
     })
     .addTo('body');
   
@@ -51,12 +51,12 @@ function createCircle(x, y) {
 
 
 function splashCircles() {
-  const centerX = window.innerWidth / 2
-  const centerY = window.innerHeight / 2
+  const X = Math.random() * nn.width
+  const Y = Math.random() * nn.height
   const numCircles = Math.floor(Math.random() * 8) + 5
 
   for (let i = 0; i < numCircles; i++) {
-    createCircle(centerX, centerY)
+    createCircle(X, Y)
   }
 }
 
@@ -75,11 +75,23 @@ function playSample (e) {
 
 function fileLoaded() {
   nn.create('span')
-    .css('font-family', 'garamond')
-    .content('Press keys a, b, c, d, e, f for wonderful music!')
+    .content('Press 1️⃣ to 6️⃣ for 🎵')
+    .css({
+      fontFamily:    'Garamond, serif',
+      fontSize:      '1.5rem',
+      color:         '#fff',
+      textAlign:     'center',
+      padding:       '1rem 2rem',
+      borderRadius:  '12px',
+      background:    'rgba(0, 0, 0, 0.3)',
+      boxShadow:     '0 4px 20px rgba(0,0,0,0.3)',
+      textShadow:    '1px 1px 4px rgba(0,0,0,0.6)',
+      transition:    'transform 0.4s ease, font-size 0.4s ease',
+      transform:     'scale(0.9)',
+    })
     .addTo('body')
 }
-    
+
 function setup() {
   nn.get('body').css({
     userSelect: 'none',
