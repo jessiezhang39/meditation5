@@ -6,47 +6,49 @@
 let music, stopTimer
 
 const samples = {
-  'a': { offset: 0.50, duration: 3.26 },
-  'b': { offset: 4.29, duration: 3.42 },
-  'c': { offset: 8.27, duration: 3.48 },
-  'd': { offset: 12.25, duration: 3.53 },
-  'e': { offset: 16.26, duration: 3.48 },
-  'f': { offset: 24.24, duration: 3.50 },
+  'a': { offset: 0, duration: 1.87 },
+  'b': { offset: 1.89, duration: 1.72 },
+  'c': { offset: 3.74, duration: 1.92 },
+  'd': { offset: 7.06, duration: 1.71 },
+  'e': { offset: 8.79, duration: 1.69 },
+  'f': { offset: 10.52, duration: 1.70 },
 }
     
 function getRandomColor() {
   return `hsl(${Math.floor(Math.random() * 360)}, 80%, 60%)`
 }
 
+  
 function createCircle(x, y) {
-  const size = Math.random() * 80 + 10 
+  const size = Math.random() * 80 + 10;
   const circle = nn.create('div')
-    .addClass('circle')
     .css({
-      position: 'absolute',
-      transform: 'scale(0.5)',
-      opacity: 1,
-      zIndex: 999,
+      position:'absolute',
       width: size + 'px',
       height: size + 'px',
       left: x - size/2 + 'px',
       top: y - size/2 + 'px',
       backgroundColor: getRandomColor(),
+      borderRadius: '50%',
+      transform: 'scale(0.5)',
+      opacity: 2,
+      transition:     'transform 1.15s ease, opacity 1.15s ease',
     })
-    .addTo('body')
-
-
+    .addTo('body');
+  
   setTimeout(() => {
-    const dx = (Math.random() - 0.5) * 300
-    const dy = (Math.random() - 0.5) * 300
+    const dx = (Math.random() - 0.5) * 300;
+    const dy = (Math.random() - 0.5) * 300;
     circle.css({
       transform: `translate(${dx}px, ${dy}px) scale(1.5)`,
-      opacity: 0
-    })
-  }, 50)
+      opacity:   0
+    });
+  }, 20)
 
-  setTimeout(() => circle.remove(), 1200)
+
+  setTimeout(() => circle.remove(), 1200);
 }
+
 
 function splashCircles() {
   const centerX = window.innerWidth / 2
@@ -74,20 +76,25 @@ function playSample (e) {
 function fileLoaded() {
   nn.create('span')
     .css('font-family', 'garamond')
-    .content('Press the keys: a, b, c, d, e, f')
+    .content('Press keys a, b, c, d, e, f for wonderful music!')
     .addTo('body')
 }
     
 function setup() {
   nn.get('body').css({
+    userSelect: 'none',
+    height: '100vh',
+    display: 'flex',
     margin: 0,
     overflow: 'hidden',
-    background: 'white',
-    position: 'relative'
+    background: getRandomColor(),
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
   })
   
   music = nn.create('audio')
-    .set('src', 'electric-piano-chords.mp3')
+    .set('src', 'violin-chords-easy-dreams_140bpm_C_minor.mp3')
     .addTo('body')
     .on('loadeddata', fileLoaded)
   
