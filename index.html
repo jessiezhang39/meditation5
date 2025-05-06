@@ -1,0 +1,106 @@
+ <script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
+  <script>
+    /* global nn */
+let music, stopTimer
+
+const samples = {
+  'a': { offset: 0.50, duration: 3.26 },
+  'b': { offset: 4.29, duration: 3.42 },
+  'c': { offset: 8.27, duration: 3.48 },
+  'd': { offset: 12.25, duration: 3.53 },
+  'e': { offset: 16.26, duration: 3.48 },
+  'f': { offset: 24.24, duration: 3.50 },
+}
+    
+function getRandomColor() {
+  return `hsl(${Math.floor(Math.random() * 360)}, 80%, 60%)`
+}
+
+function createCircle(x, y) {
+  const size = Math.random() * 80 + 10 
+  const circle = nn.create('div')
+    .addClass('circle')
+    .css({
+      width: size + 'px',
+      height: size + 'px',
+      left: x - size/2 + 'px',
+      top: y - size/2 + 'px',
+      backgroundColor: getRandomColor(),
+      transform: 'scale(0.5)',
+      opacity: 1
+    })
+    .addTo('body')
+
+
+  setTimeout(() => {
+    const dx = (Math.random() - 0.5) * 300
+    const dy = (Math.random() - 0.5) * 300
+    circle.css({
+      transform: `translate(${dx}px, ${dy}px) scale(1.5)`,
+      opacity: 0
+    })
+  }, 50)
+
+  setTimeout(() => circle.remove(), 1200)
+}
+
+function splashCircles() {
+  const centerX = window.innerWidth / 2
+  const centerY = window.innerHeight / 2
+  const numCircles = Math.floor(Math.random() * 8) + 5
+
+  for (let i = 0; i < numCircles; i++) {
+    createCircle(centerX, centerY)
+  }
+}
+
+function playSample (e) {  
+  const s = samples[e.key]  
+  music.currentTime = s.offset
+  music.play()
+  
+  const stopTime = s.duration * 1000
+  const stopPlaying = () => music.pause()
+  if (stopTimer) clearTimeout(stopTimer)
+  stopTimer = setTimeout(stopPlaying, stopTime)
+}
+
+function fileLoaded() {
+  nn.create('span')
+    .css('font-family', 'monospace')
+    .content('Press the keys: a, b, c, d, e, f')
+    .addTo('body')
+
+  nn.on('keypress', (e) => {
+    const key = e.key()
+    if (samples[key]) {
+      playSample(key)
+      splashCircles()
+    }
+  })
+}
+    
+function setup() {
+  nn.get('body').css({
+    margin: 0,
+    overflow: 'hidden',
+    background: 'white',
+    position: 'relative'
+  })
+  
+  music = nn.create('audio')
+    .set('src', 'electric-piano-chords.mp3')
+    .addTo('body')
+    .on('loadeddata', fileLoaded)
+}
+    
+nn.on('load', setup)
+
+
+    /*document.addEventListener('keydown', (e) => {
+      const validKeys = ['a', 'b', 'c', 'd', 'e']
+      if (validKeys.includes(e.key.toLowerCase())) {
+        splashCircles() */
+      }
+    })
+  </script>
